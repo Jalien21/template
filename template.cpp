@@ -8,7 +8,7 @@ using namespace terrarium;
 
 
 DaisyPetal hw; // Declare a local daisy_petal for hardware access
-DaisySeed hw2; // This is needed for serial print, but should only need one of these, right?
+DaisySeed seed; // This is needed for serial print
 
 dsy_gpio led1;
 dsy_gpio led2;
@@ -60,7 +60,7 @@ int main(void)
     hw.Init();
     samplerate = hw.AudioSampleRate();
 
-    hw2.StartLog(); // enable logging and set up USB
+    seed.StartLog(); // enable logging and set up USB
 
     vtime.Init(hw.knob[Terrarium::KNOB_1], 0.6f, 0.999f, Parameter::LOGARITHMIC);
     vfreq.Init(hw.knob[Terrarium::KNOB_2], 500.0f, 20000.0f, Parameter::LOGARITHMIC);
@@ -85,7 +85,7 @@ int main(void)
     bypass = false;
 	maxverb = false;
 
-    hw2.PrintLine("Init Complete");
+    seed.PrintLine("Init Complete");
 
     while(1) 
     {
@@ -93,9 +93,9 @@ int main(void)
         hw.DelayMs(10);
         dsy_gpio_write(&led1, bypass ? 0 : 1);
 
-        if(abs(vtime.Value()-vtime_prev)>0.0001) hw2.PrintLine("vtime = " FLT_FMT3, FLT_VAR3(vtime.Value()));
-        if(abs(vfreq.Value()-vfreq_prev)>10) hw2.PrintLine("vfreq = " FLT_FMT3, FLT_VAR3(vfreq.Value()));
-        if(abs(vsend.Value()-vsend_prev)>0.001) hw2.PrintLine("vsend = " FLT_FMT3, FLT_VAR3(vsend.Value()));
+        if(abs(vtime.Value()-vtime_prev)>0.0001) seed.PrintLine("vtime = " FLT_FMT3, FLT_VAR3(vtime.Value()));
+        if(abs(vfreq.Value()-vfreq_prev)>10) seed.PrintLine("vfreq = " FLT_FMT3, FLT_VAR3(vfreq.Value()));
+        if(abs(vsend.Value()-vsend_prev)>0.001) seed.PrintLine("vsend = " FLT_FMT3, FLT_VAR3(vsend.Value()));
 
         vtime_prev = vtime.Value();
         vfreq_prev = vfreq.Value();
@@ -112,26 +112,26 @@ void doSwitchThings()
         maxverb = true;
         dsy_gpio_write(&led2, 1);
         verb.SetFeedback(0.999f);
-        hw2.PrintLine("Max Verb On");
+        seed.PrintLine("Max Verb On");
     }
     else if (hw.switches[Terrarium::FOOTSWITCH_2].FallingEdge())
     {
         maxverb = false;
         dsy_gpio_write(&led2, 0);
-        hw2.PrintLine("Max Verb Off");
+        seed.PrintLine("Max Verb Off");
     }
-    if (hw.switches[Terrarium::SWITCH_1].RisingEdge()) hw2.PrintLine("SW1 on");
-    if (hw.switches[Terrarium::SWITCH_2].RisingEdge()) hw2.PrintLine("SW2 on");
-    if (hw.switches[Terrarium::SWITCH_3].RisingEdge()) hw2.PrintLine("SW3 on");
-    if (hw.switches[Terrarium::SWITCH_4].RisingEdge()) hw2.PrintLine("SW4 on");
-    if (hw.switches[Terrarium::SWITCH_1].FallingEdge()) hw2.PrintLine("SW1 off");
-    if (hw.switches[Terrarium::SWITCH_2].FallingEdge()) hw2.PrintLine("SW2 off");
-    if (hw.switches[Terrarium::SWITCH_3].FallingEdge()) hw2.PrintLine("SW3 off");
-    if (hw.switches[Terrarium::SWITCH_4].FallingEdge()) hw2.PrintLine("SW4 off");
+    if (hw.switches[Terrarium::SWITCH_1].RisingEdge()) seed.PrintLine("SW1 on");
+    if (hw.switches[Terrarium::SWITCH_2].RisingEdge()) seed.PrintLine("SW2 on");
+    if (hw.switches[Terrarium::SWITCH_3].RisingEdge()) seed.PrintLine("SW3 on");
+    if (hw.switches[Terrarium::SWITCH_4].RisingEdge()) seed.PrintLine("SW4 on");
+    if (hw.switches[Terrarium::SWITCH_1].FallingEdge()) seed.PrintLine("SW1 off");
+    if (hw.switches[Terrarium::SWITCH_2].FallingEdge()) seed.PrintLine("SW2 off");
+    if (hw.switches[Terrarium::SWITCH_3].FallingEdge()) seed.PrintLine("SW3 off");
+    if (hw.switches[Terrarium::SWITCH_4].FallingEdge()) seed.PrintLine("SW4 off");
 
-    //if(vtime_prev != vtime.Value()) hw2.PrintLine("vtime = " FLT_FMT3, FLT_VAR3(vtime.Value()));
-    //if(vfreq_prev != vfreq.Value()) hw2.PrintLine("vfreq = " FLT_FMT3, FLT_VAR3(vfreq.Value()));
-    //if(vsend_prev != vsend.Value()) hw2.PrintLine("vsend = " FLT_FMT3, FLT_VAR3(vsend.Value()));
+    //if(vtime_prev != vtime.Value()) seed.PrintLine("vtime = " FLT_FMT3, FLT_VAR3(vtime.Value()));
+    //if(vfreq_prev != vfreq.Value()) seed.PrintLine("vfreq = " FLT_FMT3, FLT_VAR3(vfreq.Value()));
+    //if(vsend_prev != vsend.Value()) seed.PrintLine("vsend = " FLT_FMT3, FLT_VAR3(vsend.Value()));
 
 
 }
